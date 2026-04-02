@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buzz Up Your Voice — ASI Sac State</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:      #00563F;
+    --green-dark: #003d2c;
+    --green-mid:  #006b4f;
+    --gold:       #C4B581;
+    --gold-soft:  #e8ddb8;
+    --cream:      #faf8f2;
+    --white:      #ffffff;
+    --text:       #1c1c1c;
+    --text-soft:  #5a5a5a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+  }
+
+  .page {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    position: relative;
+    overflow: hidden;
+    background: var(--cream);
+  }
+
+  .bg-deco {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .bg-deco::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,86,63,.10) 0%, transparent 70%);
+    top: -180px;
+    left: -160px;
+  }
+
+  .bg-deco::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,181,129,.18) 0%, transparent 70%);
+    bottom: -140px;
+    right: -120px;
+  }
+
+  .bg-hc {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: .045;
+    pointer-events: none;
+  }
+
+  .bg-hc svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 3.5vw;
+  min-height: 100px;
+  background: var(--white);
+  border-bottom: 1.5px solid rgba(196,181,129,.35);
+  box-shadow: 0 2px 20px rgba(0,86,63,.06);
+}
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+  width: 200px;
+  height: 100px;
+  background: transparent;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.logo-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+  .header-center {
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn .5s .1s forwards;
+  }
+
+  .header-slogan {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3.2vw, 2.8rem);
+    font-weight: 900;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: -.5px;
+  }
+
+  .header-slogan em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .header-sub {
+    font-size: clamp(.55rem, .75vw, .68rem);
+    color: var(--text-soft);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeIn .5s .3s forwards;
+  }
+
+  .badge {
+    background: var(--green);
+    color: var(--white);
+    font-size: clamp(.55rem, .75vw, .68rem);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 50px;
+  }
+
+  .cards-area {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(10px, 1.8vh, 24px) clamp(20px, 3vw, 60px);
+    gap: clamp(6px, 1vh, 14px);
+  }
+
+  .slate-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn .5s .05s forwards;
+  }
+
+  .slate-label::before,
+  .slate-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(196,181,129,.6), transparent);
+    width: clamp(40px, 8vw, 120px);
+  }
+
+  .slate-label span {
+    font-size: clamp(.55rem, .75vw, .68rem);
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: clamp(8px, 1.2vw, 20px);
+    width: 100%;
+    max-width: 1240px;
+  }
+
+  .candidate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(4px, .65vh, 8px);
+    opacity: 0;
+    animation: fadeUp .5s forwards;
+  }
+
+  .candidate:nth-child(1) { animation-delay: .12s; }
+  .candidate:nth-child(2) { animation-delay: .20s; }
+  .candidate:nth-child(3) { animation-delay: .28s; }
+  .candidate:nth-child(4) { animation-delay: .36s; }
+  .candidate:nth-child(5) { animation-delay: .44s; }
+  .candidate:nth-child(6) { animation-delay: .52s; }
+
+  .cand-position {
+    min-height: clamp(30px, 4.5vh, 46px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 2px;
+  }
+
+  .cand-position span {
+    background: var(--green);
+    color: var(--white);
+    font-size: clamp(.46rem, .7vw, .66rem);
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .cand-card {
+    width: 100%;
+    aspect-ratio: 3 / 4.3;
+    border-radius: clamp(22px, 3.8vw, 56px);
+    overflow: hidden;
+    border: 2.5px solid rgba(196,181,129,.5);
+    position: relative;
+    cursor: pointer;
+    background: var(--white);
+    box-shadow:
+      0 4px 16px rgba(0,86,63,.08),
+      0 1px 4px rgba(0,0,0,.06);
+    transition:
+      transform .32s cubic-bezier(.25,.8,.25,1),
+      box-shadow .32s,
+      border-color .32s;
+  }
+
+  .cand-card:hover {
+    transform: translateY(-8px) scale(1.025);
+    box-shadow:
+      0 24px 56px rgba(0,86,63,.18),
+      0 0 0 2.5px var(--green),
+      0 1px 4px rgba(0,0,0,.08);
+    border-color: var(--green);
+  }
+
+  .cand-photo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 2.6vw, 2.6rem);
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,.85);
+    position: relative;
+    user-select: none;
+  }
+
+  .candidate:nth-child(1) .cand-photo { background: linear-gradient(165deg,#004d38 0%,#007a59 55%,#b09860 100%); }
+  .candidate:nth-child(2) .cand-photo { background: linear-gradient(165deg,#003020 0%,#005a40 55%,#9a8850 100%); }
+  .candidate:nth-child(3) .cand-photo { background: linear-gradient(165deg,#005840 0%,#003d2c 55%,#C4B581 100%); }
+  .candidate:nth-child(4) .cand-photo { background: linear-gradient(165deg,#004030 0%,#006b50 55%,#a89860 100%); }
+  .candidate:nth-child(5) .cand-photo { background: linear-gradient(165deg,#003828 0%,#005840 55%,#C4B581 100%); }
+  .candidate:nth-child(6) .cand-photo { background: linear-gradient(165deg,#004535 0%,#003020 55%,#b8a868 100%); }
+
+  .cand-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 20%, rgba(255,255,255,.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .initials {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cand-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: none;
+    z-index: 2;
+  }
+
+  .cand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(.58rem, .88vw, .86rem);
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.3;
+    min-height: clamp(22px, 3.5vh, 36px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .mission-section {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    opacity: 0;
+    animation: fadeIn .7s .65s forwards;
+  }
+
+  .mission-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 900;
+    color: var(--green);
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+
+  .mission-text {
+    font-size: clamp(.9rem, 1vw, 1.05rem);
+    color: var(--text-soft);
+    line-height: 1.75;
+    max-width: 700px;
+    margin: auto;
+  }
+
+  .candidate-page {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    background: var(--cream);
+    overflow-y: auto;
+  }
+
+  .candidate-page.active {
+    display: block;
+  }
+
+  .candidate-page-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .candidate-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .back-btn {
+    border: none;
+    background: var(--green);
+    color: var(--white);
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: .95rem;
+  }
+
+  .back-btn:hover {
+    background: var(--green-dark);
+  }
+
+  .candidate-page-badge {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: .72rem;
+    font-weight: 700;
+  }
+
+  .candidate-hero {
+    display: grid;
+    grid-template-columns: minmax(260px, 360px) 1fr;
+    gap: 34px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+
+  .candidate-hero-photo {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 34px;
+    overflow: hidden;
+    background: linear-gradient(165deg,#004d38 0%,#007a59 55%,#b09860 100%);
+    border: 2.5px solid rgba(196,181,129,.45);
+    box-shadow: 0 18px 42px rgba(0,86,63,.12);
+    position: relative;
+  }
+
+  .candidate-hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .candidate-hero-info h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4.2vw, 4rem);
+    color: var(--green);
+    line-height: 1.02;
+    margin-bottom: 12px;
+  }
+
+  .candidate-role {
+    display: inline-block;
+    background: var(--green);
+    color: var(--white);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 20px;
+  }
+
+  .candidate-summary {
+    color: var(--text-soft);
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 680px;
+  }
+
+  .candidate-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 30px 0;
+  }
+
+  .info-card {
+    background: var(--white);
+    border: 1.5px solid rgba(196,181,129,.35);
+    border-radius: 22px;
+    padding: 18px 16px;
+    box-shadow: 0 8px 24px rgba(0,86,63,.06);
+  }
+
+  .info-card-label {
+    color: var(--gold);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .info-card-value {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+
+  .statement-section,
+  .gallery-section {
+    margin-top: 34px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--green);
+    font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+    margin-bottom: 14px;
+  }
+
+  .statement-box {
+    background: var(--white);
+    border: 1.5px solid rgba(196,181,129,.35);
+    border-radius: 28px;
+    padding: 26px;
+    box-shadow: 0 10px 28px rgba(0,86,63,.06);
+  }
+
+  .statement-box p {
+    color: var(--text-soft);
+    line-height: 1.85;
+    font-size: 1rem;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .gallery-item {
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(165deg,#004d38 0%,#007a59 55%,#b09860 100%);
+    border: 2px solid rgba(196,181,129,.35);
+    box-shadow: 0 10px 24px rgba(0,86,63,.06);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  footer {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(30px, 4vh, 46px);
+    background: var(--white);
+    border-top: 1.5px solid rgba(196,181,129,.3);
+  }
+
+  footer p {
+    font-size: clamp(.5rem, .66vw, .62rem);
+    color: var(--text-soft);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1000px) {
+    .candidate-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .candidate-hero-photo {
+      max-width: 360px;
+    }
+
+    .candidate-info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 700px) {
+    html, body { overflow: auto; }
+    .page { height: auto; min-height: 100vh; }
+    .cards-area { padding: 14px 10px 28px; }
+    .cards-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .cand-position, .cand-name { min-height: 0; height: auto; padding: 2px 0; }
+    .header-right .badge { display: none; }
+    .mission-section { margin-top: 28px; padding: 10px 8px; }
+
+    .candidate-page-inner {
+      padding: 20px 14px 40px;
+    }
+
+    .candidate-info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .candidate-topbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page" id="homePage">
+
+  <div class="bg-deco"></div>
+
+  <div class="bg-hc">
+    <svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hc" x="0" y="0" width="80" height="92.4" patternUnits="userSpaceOnUse">
+          <polygon points="40,0 80,23.1 80,69.3 40,92.4 0,69.3 0,23.1" fill="none" stroke="#00563F" stroke-width="1.2"/>
+          <polygon points="80,46.2 120,69.3 120,115.5 80,138.6 40,115.5 40,69.3" fill="none" stroke="#00563F" stroke-width="1.2"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hc)"/>
+    </svg>
+  </div>
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <img src="images/slatelogo.jpg" alt="Buzz Up Your Voice Slate Logo">
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="header-slogan">Buzz Up <em>Your Voice!</em></div>
+      <div class="header-sub">Sacramento State · ASI Elections 2026</div>
+    </div>
+
+    <div class="header-right">
+      <div class="badge">Vote Now</div>
+    </div>
+  </header>
+
+  <div class="cards-area">
+    <div class="slate-label">
+      <span>ASI 2026 Election Candidates</span>
+    </div>
+
+    <div class="cards-grid">
+
+      <div class="candidate">
+        <div class="cand-position"><span>Vice President of Finance</span></div>
+        <div class="cand-card" data-candidate="kenni">
+          <div class="cand-photo">
+            <img src="images/kenni.jpg" alt="Kenni Jocabet Diaz Lopez">
+            <span class="initials">KD</span>
+          </div>
+        </div>
+        <div class="cand-name">Kenni Jocabet<br>Diaz Lopez</div>
+      </div>
+
+      <div class="candidate">
+        <div class="cand-position"><span>Vice President of University Affairs</span></div>
+        <div class="cand-card" data-candidate="aadil">
+          <div class="cand-photo">
+            <img src="images/aadil.jpg" alt="Aadil Bhat">
+            <span class="initials">AB</span>
+          </div>
+        </div>
+        <div class="cand-name">Aadil Bhat</div>
+      </div>
+
+      <div class="candidate">
+        <div class="cand-position"><span>Vice President of Academic Affairs</span></div>
+        <div class="cand-card" data-candidate="sara">
+          <div class="cand-photo">
+            <img src="images/sara.jpg" alt="Sara">
+            <span class="initials">SA</span>
+          </div>
+        </div>
+        <div class="cand-name">Sara</div>
+      </div>
+
+      <div class="candidate">
+        <div class="cand-position"><span>Director of Business</span></div>
+        <div class="cand-card" data-candidate="arinav">
+          <div class="cand-photo">
+            <img src="images/arinav.jpg" alt="Arinav Chanday">
+            <span class="initials">AC</span>
+          </div>
+        </div>
+        <div class="cand-name">Arinav Chanday</div>
+      </div>
+
+      <div class="candidate">
+        <div class="cand-position"><span>Director of Engineering & Science</span></div>
+        <div class="cand-card" data-candidate="raj">
+          <div class="cand-photo">
+            <img src="images/raj.jpg" alt="Raj Lalit Challa">
+            <span class="initials">RC</span>
+          </div>
+        </div>
+        <div class="cand-name">Raj Lalit Challa</div>
+      </div>
+
+      <div class="candidate">
+        <div class="cand-position"><span>Director of Natural Sciences &amp; Math</span></div>
+        <div class="cand-card" data-candidate="noor">
+          <div class="cand-photo">
+            <img src="images/noor.jpg" alt="Noor">
+            <span class="initials">NO</span>
+          </div>
+        </div>
+        <div class="cand-name">Noor</div>
+      </div>
+
+    </div>
+
+    <div class="mission-section">
+      <div class="mission-title">Six Leaders, One Mission</div>
+      <p class="mission-text">
+        Our mission is to represent every Hornet voice with integrity, inclusivity, and purpose.
+        As a team of six student leaders, we believe Sacramento State is strongest when every
+        student feels heard, supported, and empowered.
+        <br><br>
+        We are committed to promoting diversity across campus, strengthening student wellness,
+        and ensuring all communities have a seat at the table. Through transparency,
+        collaboration, and accountability, we aim to build a student government that truly
+        reflects the values and needs of the Sac State community.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>California State University, Sacramento &nbsp;·&nbsp; Paid for by the Buzz Up Your Voice Slate</p>
+  </footer>
+</div>
+
+<div class="candidate-page" id="candidatePage">
+  <div class="bg-deco"></div>
+
+  <div class="candidate-page-inner">
+    <div class="candidate-topbar">
+      <button class="back-btn" id="backBtn">← Back to Home</button>
+      <div class="candidate-page-badge">Buzz Up Your Voice · Candidate Profile</div>
+    </div>
+
+    <div class="candidate-hero">
+      <div class="candidate-hero-photo">
+        <img id="detailMainImage" src="" alt="">
+      </div>
+
+      <div class="candidate-hero-info">
+        <h1 id="detailName">Candidate Name</h1>
+        <div class="candidate-role" id="detailRole">Position</div>
+        <p class="candidate-summary" id="detailSummary">
+          Candidate intro goes here.
+        </p>
+      </div>
+    </div>
+
+    <div class="candidate-info-grid">
+      <div class="info-card">
+        <div class="info-card-label">Hometown</div>
+        <div class="info-card-value" id="detailHometown">Coming soon</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Major</div>
+        <div class="info-card-value" id="detailMajor">Coming soon</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Fun Fact</div>
+        <div class="info-card-value" id="detailFunFact">Coming soon</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Campus Involvement</div>
+        <div class="info-card-value" id="detailInvolvement">Coming soon</div>
+      </div>
+    </div>
+
+    <div class="statement-section">
+      <div class="section-title">Candidate Statement</div>
+      <div class="statement-box">
+        <p id="detailStatement">
+          Statement goes here.
+        </p>
+      </div>
+    </div>
+
+    <div class="gallery-section">
+      <div class="section-title">More Photos</div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img id="gallery1" src="" alt=""></div>
+        <div class="gallery-item"><img id="gallery2" src="" alt=""></div>
+        <div class="gallery-item"><img id="gallery3" src="" alt=""></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.cand-photo').forEach((wrap) => {
+    const img = wrap.querySelector('img');
+    const initials = wrap.querySelector('.initials');
+
+    if (img && img.getAttribute('src') && img.getAttribute('src').trim() !== "") {
+      img.style.display = 'block';
+      if (initials) initials.style.display = 'none';
+    } else {
+      if (initials) initials.style.display = 'block';
+    }
+  });
+
+  const candidates = {
+    kenni: {
+      name: "Kenni Jocabet Diaz Lopez",
+      role: "Vice President of Finance",
+      summary: "Kenni is committed to making student resources more transparent, accessible, and student-centered. She believes financial leadership should be rooted in responsibility, representation, and trust.",
+      hometown: "Your hometown here",
+      major: "Your major here",
+      funFact: "Add a fun fact here",
+      involvement: "Student organizations, leadership roles, and campus work here",
+      statement: "As Vice President of Finance, I want to support student organizations and initiatives with transparency, fairness, and accountability. I believe every student deserves to understand how resources are being used and to feel confident that student funds are serving the campus community. My goal is to help build a stronger and more supportive Sac State for everyone.",
+      mainImage: "images/kenni.jpg",
+      gallery: ["images/kenni1.jpg", "images/kenni2.jpg", "images/kenni3.jpg"]
+    },
+    aadil: {
+      name: "Aadil Bhat",
+      role: "Vice President of University Affairs",
+      summary: "Aadil believes student government should be visible, approachable, and action-driven. He is focused on advocacy, campus connection, student wellness, and making sure every Hornet voice is heard.",
+      hometown: "Punjab, India",
+      major: "Computer Engineering",
+      funFact: "Play Soccer, Solving Math Problems",
+      involvement: "ECS Joint Council-President, Cricket Club-Vice President",
+      statement: "I am running for Vice President of University Affairs because I want to help create a campus where students feel represented, supported, and connected. I care deeply about student well-being, access to opportunities, and stronger communication between students and administration. I want to advocate for real student needs while helping make Sacramento State a more inclusive and empowering place for all.",
+      mainImage: "images/aadil.jpg",
+      gallery: ["images/aadil1.jpg", "images/aadil2.jpg", "images/aadil3.jpg"]
+    },
+    sara: {
+      name: "Sara",
+      role: "Vice President of Academic Affairs",
+      summary: "Sara is passionate about academic support, student success, and helping students feel confident in their educational journey at Sac State.",
+      hometown: "Your hometown here",
+      major: "Your major here",
+      funFact: "Add a fun fact here",
+      involvement: "Tutoring, mentoring, clubs, and campus involvement here",
+      statement: "As Vice President of Academic Affairs, I want to advocate for stronger academic support systems and better access to opportunities that help students thrive. Every student deserves to feel encouraged, prepared, and valued in the classroom and beyond. I want to help build a campus culture where academic success is possible for everyone.",
+      mainImage: "images/sara.jpg",
+      gallery: ["images/sara1.jpg", "images/sara2.jpg", "images/sara3.jpg"]
+    },
+    arinav: {
+      name: "Arinav Chanday",
+      role: "Director of Business",
+      summary: "Arinav wants to bring energy, professionalism, and student-focused leadership to the College of Business through stronger engagement and meaningful representation.",
+      hometown: "Your hometown here",
+      major: "Your major here",
+      funFact: "Add a fun fact here",
+      involvement: "Campus jobs, clubs, committees, and student leadership here",
+      statement: "I want to represent business students with integrity, energy, and purpose. My goal is to help improve communication, support student opportunities, and create stronger connections within the College of Business. I believe leadership means listening first, showing up consistently, and working hard to create results students can actually feel.",
+      mainImage: "images/arinav.jpg",
+      gallery: ["images/arinav1.jpg", "images/arinav2.jpg", "images/arinav3.jpg"]
+    },
+    raj: {
+      name: "Raj Lalit Challa",
+      role: "Director of Engineering & Science",
+      summary: "Raj is dedicated to representing STEM students through collaboration, innovation, and strong student advocacy across the college experience.",
+      hometown: "Your hometown here",
+      major: "Your major here",
+      funFact: "Add a fun fact here",
+      involvement: "Engineering, science clubs, leadership roles, projects here",
+      statement: "As Director of Engineering & Science, I want to advocate for students who work hard every day in demanding and innovative fields. I believe students in STEM deserve more visibility, more support, and stronger connections to leadership and opportunity. My goal is to help make our college more collaborative, engaged, and student-driven.",
+      mainImage: "images/raj.jpg",
+      gallery: ["images/raj1.jpg", "images/raj2.jpg", "images/raj3.jpg"]
+    },
+    noor: {
+      name: "Noor",
+      role: "Director of Natural Sciences & Math",
+      summary: "Noor wants to create a more welcoming and empowering space for students in science and mathematics through representation, care, and active leadership.",
+      hometown: "Your hometown here",
+      major: "Your major here",
+      funFact: "Add a fun fact here",
+      involvement: "Campus clubs, research, mentoring, or student work here",
+      statement: "I am running to represent students in Natural Sciences and Mathematics with care, commitment, and a strong sense of community. I want students to feel seen, heard, and encouraged as they navigate their academic journeys. Through collaboration and inclusive leadership, I hope to help strengthen opportunities and support for every student in the college.",
+      mainImage: "images/noor.jpg",
+      gallery: ["images/noor1.jpg", "images/noor2.jpg", "images/noor3.jpg"]
+    }
+  };
+
+  const candidatePage = document.getElementById("candidatePage");
+  const backBtn = document.getElementById("backBtn");
+
+  const detailName = document.getElementById("detailName");
+  const detailRole = document.getElementById("detailRole");
+  const detailSummary = document.getElementById("detailSummary");
+  const detailHometown = document.getElementById("detailHometown");
+  const detailMajor = document.getElementById("detailMajor");
+  const detailFunFact = document.getElementById("detailFunFact");
+  const detailInvolvement = document.getElementById("detailInvolvement");
+  const detailStatement = document.getElementById("detailStatement");
+  const detailMainImage = document.getElementById("detailMainImage");
+  const gallery1 = document.getElementById("gallery1");
+  const gallery2 = document.getElementById("gallery2");
+  const gallery3 = document.getElementById("gallery3");
+
+  function openCandidatePage(key) {
+    const person = candidates[key];
+    if (!person) return;
+
+    detailName.textContent = person.name;
+    detailRole.textContent = person.role;
+    detailSummary.textContent = person.summary;
+    detailHometown.textContent = person.hometown;
+    detailMajor.textContent = person.major;
+    detailFunFact.textContent = person.funFact;
+    detailInvolvement.textContent = person.involvement;
+    detailStatement.textContent = person.statement;
+
+    detailMainImage.src = person.mainImage;
+    detailMainImage.alt = person.name;
+
+    gallery1.src = person.gallery[0];
+    gallery2.src = person.gallery[1];
+    gallery3.src = person.gallery[2];
+
+    gallery1.alt = person.name + " photo 1";
+    gallery2.alt = person.name + " photo 2";
+    gallery3.alt = person.name + " photo 3";
+
+    candidatePage.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeCandidatePage() {
+    candidatePage.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  document.querySelectorAll(".cand-card").forEach(card => {
+    card.addEventListener("click", () => {
+      openCandidatePage(card.dataset.candidate);
+    });
+  });
+
+  backBtn.addEventListener("click", closeCandidatePage);
+</script>
+</body>
+</html>
