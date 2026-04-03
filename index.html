@@ -919,9 +919,10 @@
   const gallery2 = document.getElementById("gallery2");
   const gallery3 = document.getElementById("gallery3");
 
-  history.pushState({ candidate: key }, '', '#' + key);
+  
 
   function openCandidatePage(key) {
+    history.pushState({ candidate: key }, '', '#' + key);
     const person = candidates[key];
     if (!person) return;
 
