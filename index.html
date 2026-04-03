@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buzz Up Your Voice — ASI Sac State</title>
+<title>Buzz Up Your Voice — ASI Election Candidates</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -12,7 +12,7 @@
     --green-mid:  #006b4f;
     --gold:       #C4B581;
     --gold-soft:  #e8ddb8;
-    --cream:      #faf8f2;
+    --cream:      #faf8f2;  
     --white:      #ffffff;
     --text:       #1c1c1c;
     --text-soft:  #5a5a5a;
@@ -919,6 +919,8 @@
   const gallery2 = document.getElementById("gallery2");
   const gallery3 = document.getElementById("gallery3");
 
+  history.pushState({ candidate: key }, '', '#' + key);
+
   function openCandidatePage(key) {
     const person = candidates[key];
     if (!person) return;
@@ -950,6 +952,7 @@
   function closeCandidatePage() {
     candidatePage.classList.remove("active");
     document.body.style.overflow = "";
+    history.pushState({}, '', ' ');
   }
 
   document.querySelectorAll(".cand-card").forEach(card => {
@@ -959,6 +962,14 @@
   });
 
   backBtn.addEventListener("click", closeCandidatePage);
+
+  window.addEventListener('popstate', function(e) {
+  if (e.state && e.state.candidate) {
+    openCandidatePage(e.state.candidate);
+  } else {
+    closeCandidatePage();
+  }
+});
 </script>
 </body>
 </html>
