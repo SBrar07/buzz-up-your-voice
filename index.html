@@ -204,6 +204,29 @@
     color: var(--gold);
   }
 
+  .click-hint-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    opacity: 0;
+    animation: fadeIn .5s .6s forwards;
+  }
+
+  .click-hint-row svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+
+  .click-hint-row span {
+    font-size: clamp(.52rem, .72vw, .65rem);
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -265,6 +288,12 @@
       transform .32s cubic-bezier(.25,.8,.25,1),
       box-shadow .32s,
       border-color .32s;
+    animation: subtlePulse 2.8s ease-in-out 1.4s 3;
+  }
+
+  @keyframes subtlePulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(0,86,63,.08), 0 1px 4px rgba(0,0,0,.06); }
+    50%       { box-shadow: 0 4px 16px rgba(0,86,63,.08), 0 0 0 3.5px rgba(196,181,129,0.65); }
   }
 
   .cand-card:hover {
@@ -274,6 +303,7 @@
       0 0 0 2.5px var(--green),
       0 1px 4px rgba(0,0,0,.08);
     border-color: var(--green);
+    animation: none;
   }
 
   .cand-photo {
@@ -322,6 +352,31 @@
     z-index: 2;
   }
 
+  .cand-tap-hint {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,60,40,0.82) 0%, transparent 100%);
+    color: rgba(255,255,255,0.92);
+    font-size: clamp(.44rem, .65vw, .60rem);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 28px 8px 10px;
+    border-radius: 0 0 clamp(22px, 3.8vw, 56px) clamp(22px, 3.8vw, 56px);
+    pointer-events: none;
+    z-index: 6;
+    opacity: 1;
+    transition: opacity .25s;
+  }
+
+  .cand-card:hover .cand-tap-hint {
+    opacity: 0;
+  }
+
   .cand-name {
     font-family: 'Playfair Display', serif;
     font-size: clamp(.58rem, .88vw, .86rem);
@@ -362,7 +417,6 @@
     margin: auto;
   }
 
-  
   .ig-float {
     position: fixed;
     bottom: 28px;
@@ -432,7 +486,6 @@
     transform: translateY(-2px);
   }
 
-  
   .candidate-page {
     position: fixed;
     inset: 0;
@@ -571,8 +624,7 @@
     font-weight: 600;
   }
 
-  .statement-section,
-  .gallery-section {
+  .statement-section {
     margin-top: 34px;
   }
 
@@ -595,29 +647,6 @@
     color: var(--text-soft);
     line-height: 1.85;
     font-size: 1rem;
-  }
-
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-
-  .gallery-item {
-    aspect-ratio: 1 / 1;
-    border-radius: 24px;
-    overflow: hidden;
-    background: linear-gradient(165deg,#004d38 0%,#007a59 55%,#b09860 100%);
-    border: 2px solid rgba(196,181,129,.35);
-    box-shadow: 0 10px 24px rgba(0,86,63,.06);
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
   }
 
   footer {
@@ -664,7 +693,6 @@
     .mission-section { margin-top: 28px; padding: 10px 8px; }
     .candidate-page-inner { padding: 20px 14px 40px; }
     .candidate-info-grid { grid-template-columns: 1fr; }
-    .gallery-grid { grid-template-columns: 1fr; }
     .candidate-topbar { flex-direction: column; align-items: flex-start; }
     .ig-float { bottom: 18px; right: 18px; padding: 11px 16px 11px 13px; font-size: .8rem; }
   }
@@ -710,6 +738,14 @@
       <span>ASI 2026 Election Candidates</span>
     </div>
 
+    <div class="click-hint-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11V6a3 3 0 0 1 6 0v5"/>
+        <path d="M5 11h14l-1.5 9H6.5L5 11z"/>
+      </svg>
+      <span>Click any card to meet the candidate</span>
+    </div>
+
     <div class="cards-grid">
 
       <div class="candidate">
@@ -719,6 +755,7 @@
             <img src="images/kenni.jpg" alt="Kenni Jocabet Diaz Lopez">
             <span class="initials">KD</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Kenni Jocabet<br>Diaz Lopez</div>
       </div>
@@ -730,6 +767,7 @@
             <img src="images/aadil.jpg" alt="Aadil Bhat">
             <span class="initials">AB</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Aadil Bhat</div>
       </div>
@@ -741,6 +779,7 @@
             <img src="images/sara.jpg" alt="Sara">
             <span class="initials">SA</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Sara Besaiso</div>
       </div>
@@ -752,6 +791,7 @@
             <img src="images/arinav.jpg" alt="Arinav Chanday">
             <span class="initials">AC</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Arinav Chanday</div>
       </div>
@@ -763,6 +803,7 @@
             <img src="images/raj.jpg" alt="Raj Lalith Challa">
             <span class="initials">RC</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Raj Lalith Challa</div>
       </div>
@@ -774,6 +815,7 @@
             <img src="images/noor.jpg" alt="Noor">
             <span class="initials">NO</span>
           </div>
+          <div class="cand-tap-hint">Tap to learn more</div>
         </div>
         <div class="cand-name">Noor</div>
       </div>
@@ -821,7 +863,6 @@
         <div class="candidate-role" id="detailRole">Position</div>
         <p class="candidate-summary" id="detailSummary">Candidate intro goes here.</p>
 
-        
         <a href="#" id="detailInstagram" target="_blank" rel="noopener noreferrer" class="ig-profile-btn">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" stroke="currentColor" stroke-width="2"/>
@@ -859,14 +900,6 @@
       </div>
     </div>
 
-    <div class="gallery-section">
-      <div class="section-title">More Photos</div>
-      <div class="gallery-grid">
-        <div class="gallery-item"><img id="gallery1" src="" alt=""></div>
-        <div class="gallery-item"><img id="gallery2" src="" alt=""></div>
-        <div class="gallery-item"><img id="gallery3" src="" alt=""></div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -903,7 +936,6 @@
       involvement: "I proudly served as an orientation leader and I am part of the college corps program at Sac State",
       statement: "Hello Hornets! My name is Kenni Diaz Lopez. I am a senior Business Administration major concentrating in International Business, and I am running to be your next ASI Vice President of Finance. As an Orientation Leader, I've guided new students through GE advising and their transition to Sacramento State. These conversations taught me that active involvement is the only way to truly understand student concerns. My community service experience has shown me that advocating for others is a powerful tool for change, and real leadership happens when we work as a team. The Vice President of Finance is the Chief Financial Officer of ASI. If elected, I will oversee the fiscal affairs of our multimillion-dollar non-profit organization, managing the annual budget that funds our clubs, programs, and student services. As a first generation Latina, I know it can be hard to raise your voice when you don't know who to turn to. My priority is to be an approachable VP of Finance, someone you are never afraid to come to with a question or an idea. I will lead with Transparency, Diversity, and Integrity. I will advocate for fiscal clarity to ensure understanding how our budget is allocated, strategic reasoning providing clear justifications for every dollar spent to ensure a direct, positive impact on students, and accountable oversight by using my business background to manage our finances with the professional discipline our student fees deserve. I am running to serve you. Remember when it is your vision, it equals my hustle. Thank you!",
       mainImage: "images/kenni.jpg",
-      gallery: ["images/kenni1.jpg", "images/kenni2.jpg", "images/kenni3.jpg"],
       instagram: "https://www.instagram.com/kennidiaz_vpf?igsh=NTc4MTIwNjQ2YQ=="
     },
     aadil: {
@@ -916,7 +948,6 @@
       involvement: "Current ASI ECS Diretor, ECS Joint Council President, Cricket Club Vice President, Orientation Leader, and many more",
       statement: "Hello Hornets, my name is Aadil Bhat, and I am running for ASI Vice President of University Affairs. I am an international student from Punjab, India, and I currently serve as the ASI Director for the College of Engineering and Computer Science, where I work to represent student voices and strengthen communication between students and university leadership. During my term, I supported initiatives that promote innovation, student engagement, and community impact. I helped secure funding for Hornet Hacks, a campus hackathon that encourages student innovation and entrepreneurship. I also helped revive the long-standing Turkey Bowl tradition between the Colleges of Engineering & Computer Science and Natural Sciences & Mathematics, turning it into a friendly tournament and food drive supporting the campus food pantry. In addition, I supported the ECS Expo, where students showcase projects and innovations to prospective students and the community. A major focus of my work has been increasing transparency around mandatory student tuition and fees. Many students pay these fees without knowing how they are used. I worked on increasing awareness of student fee utilization and advocating for clearer breakdowns so students can better understand where their money goes and how these resources support programs and services across campus. I also advocated for stronger communication between students and university leadership. This led to initiatives such as Donuts with the Dean, where students could directly share concerns with college leadership, and the Honor Roll and Camera Roll event recognizing students on the Dean's Honors List. In addition, I represent students on several university committees where important decisions about our campus are made. As Vice President of University Affairs, I will continue advocating for transparency, strong student representation in university level, and better communication between students and campus leadership. Thank you for your support.",
       mainImage: "images/aadil.jpg",
-      gallery: ["images/aadil1.jpg", "images/aadil2.jpg", "images/aadil3.jpg"],
       instagram: "https://www.instagram.com/aadilbhat_vpua?igsh=NTc4MTIwNjQ2YQ=="
     },
     sara: {
@@ -929,7 +960,6 @@
       involvement: "Vice President of Arab Student Union and Public Health Club, Team manager and treasurer of Men's soccer club, SEE program member",
       statement: "Hello Hornets! My name is Sara Besaiso, I am an international student studying biological sciences and I am running to be your next Vice President of Academic Affairs. I'm running as a fellow student who understands the challenges we face navigating our academic system today. Many of us chose Sac State for its affordability and academic success. However, over time this focus has shifted away from some of its core values. In my two years here, I've seen the same challenges across majors: impacted classes, difficulty enrolling in required courses, and rising academic costs that defeat the purpose of Sac State's affordability. These struggles affect students across departments, and many are unaware of their academic rights or the ability to appeal certain policies. One of my priorities is to increase awareness of grade appeals and academic rights so students understand the options available to them. As Vice President of Academic Affairs, I would not only fight for policy change, I would also try to advocate for structural shifts to meet your needs. First I will work towards opening more summer and winter courses that satisfy GE and major requirements, work with departments to increase sections for high demand classes and support policies that prioritize enrollment for students approaching graduation. In addition, reforming existing courses in order to make them count towards multiple requirements to create more flexible graduation paths. While graduation is still ahead for me, many of my peers have shared concerns about the $145 graduation application fee. Which is why I will work to explore programs to help students cover these graduation related costs. Real change requires us to be informed, involved and united. Together we can reform our academic system from within. I ask for your support to ensure Sac State continues to prioritize student success, accessibility and fairness.",
       mainImage: "images/sara.jpg",
-      gallery: ["images/sara1.jpg", "images/sara2.jpg", "images/sara3.jpg"],
       instagram: "https://www.instagram.com/sarabesaiso4vpaa?igsh=NTc4MTIwNjQ2YQ=="
     },
     arinav: {
@@ -942,7 +972,6 @@
       involvement: "PARC Workshop facilitator, Orientation Leader, Cricket Club Student Founder President",
       statement: "Hello, I am Arinav Chanday and I am a junior at Sac State. I am running for the Director of Business. Over the time I have spent in Sac State, I have had a fortune of serving as an orientation leader and welcoming new hornets to Sac State. I also work as a Workshop Leader for the Peer and Academic Resource Center (PARC). And apart from that I am also currently serving as the President of Cricket club. Through these experiences I have learned that leadership is not about titles, it's about service. It's about honestly fulfilling your duty and making sure every student feels seen, heard and supported. My top priority is to strengthen opportunity and support within the College of Business. I am ready to serve. I am ready to lead. And I am ready to represent you.",
       mainImage: "images/arinav.jpg",
-      gallery: ["images/arinav1.jpg", "images/arinav2.jpg", "images/arinav3.jpg"],
       instagram: "https://www.instagram.com/arinavchandayforbusiness?igsh=NTc4MTIwNjQ2YQ=="
     },
     raj: {
@@ -955,7 +984,6 @@
       involvement: "Serves as an Officer in Clubs like Hornet Business & Freelancing Labs, and Data Science and Student Alumni Association; also engaged in the Hornet Leadership Program, Startup competitions, and Hackathons across California",
       statement: "Hello, my name is Raj Lalith Challa, and I am running for Director of ECS. Over the past year, I have actively participated in student projects, committees, and initiatives that impact our ECS community, gaining valuable experience in leadership, collaboration, and listening to student voices. My top priority is to create more opportunities for ECS students to connect with employers, gain real-world experience, and access the courses they need to succeed. To achieve this, I will bring more companies to campus, organize networking events, and work closely with the department to offer more CS classes that meet student demand. I want ECS to be a hub where students can build skills, grow connections, and prepare for their careers. Running independently allows me to serve all ECS students and bring fresh ideas to leadership. On April 22 and 23, I ask for your support. Together, we can make ECS stronger, more connected, and full of opportunities for every student. Thank you, and I hope to earn your vote!",
       mainImage: "images/raj.jpg",
-      gallery: ["images/raj1.jpg", "images/raj2.jpg", "images/raj3.jpg"],
       instagram: "https://www.instagram.com/rajlalithchalla_director_ecs?igsh=NTc4MTIwNjQ2YQ=="
     },
     noor: {
@@ -968,16 +996,14 @@
       involvement: "I serve as Commit to study mentor and Math literacy program mentor. I also work as a PARC tutor and I am part of the SEE program.",
       statement: "Hello, my name is Noor, and I am running for Director of Natural Sciences and Mathematics. As a Biology major, and peer tutor at Sacramento State, I see firsthand how demanding STEM majors can be. Long study hours, heavy course loads, and academic pressure can often affect students' mental health. My goal is to make mental well-being a stronger priority within the NSM community. Students should not feel like they have to struggle alone while pursuing their academic goals. If elected, I want to advocate for more conversations around mental health, promote campus wellness resources, and create supportive spaces where STEM students can connect, share experiences, and support each other. In addition to focusing on wellness, I will continue to support academic success by helping students stay informed about tutoring resources, research opportunities, and campus programs that help them thrive. STEM students work incredibly hard, and they deserve representation that understands both their academic and personal challenges. I would be honored to serve and advocate for the NSM community. Thank you for your support.",
       mainImage: "images/noor.jpg",
-      gallery: ["images/noor1.jpg", "images/noor2.jpg", "images/noor3.jpg"],
       instagram: "https://www.instagram.com/noorfornsm?igsh=NTc4MTIwNjQ2YQ=="
     }
   };
 
-  const candidatePage   = document.getElementById("candidatePage");
-  const backBtn         = document.getElementById("backBtn");
-  const igFloat         = document.getElementById("igFloat");
-  const detailInstagram = document.getElementById("detailInstagram");
-
+  const candidatePage     = document.getElementById("candidatePage");
+  const backBtn           = document.getElementById("backBtn");
+  const igFloat           = document.getElementById("igFloat");
+  const detailInstagram   = document.getElementById("detailInstagram");
   const detailName        = document.getElementById("detailName");
   const detailRole        = document.getElementById("detailRole");
   const detailSummary     = document.getElementById("detailSummary");
@@ -987,9 +1013,6 @@
   const detailInvolvement = document.getElementById("detailInvolvement");
   const detailStatement   = document.getElementById("detailStatement");
   const detailMainImage   = document.getElementById("detailMainImage");
-  const gallery1 = document.getElementById("gallery1");
-  const gallery2 = document.getElementById("gallery2");
-  const gallery3 = document.getElementById("gallery3");
 
   function openCandidatePage(key) {
     history.pushState({ candidate: key }, '', '#' + key);
@@ -1004,23 +1027,12 @@
     detailFunFact.textContent     = person.funFact;
     detailInvolvement.textContent = person.involvement;
     detailStatement.textContent   = person.statement;
-
-    detailMainImage.src = person.mainImage;
-    detailMainImage.alt = person.name;
-
-    gallery1.src = person.gallery[0];
-    gallery2.src = person.gallery[1];
-    gallery3.src = person.gallery[2];
-    gallery1.alt = person.name + " photo 1";
-    gallery2.alt = person.name + " photo 2";
-    gallery3.alt = person.name + " photo 3";
-
-    
-    detailInstagram.href = person.instagram;
+    detailMainImage.src           = person.mainImage;
+    detailMainImage.alt           = person.name;
+    detailInstagram.href          = person.instagram;
 
     candidatePage.classList.add("active");
     document.body.style.overflow = "hidden";
-
     igFloat.style.display = "none";
   }
 
@@ -1028,8 +1040,6 @@
     candidatePage.classList.remove("active");
     document.body.style.overflow = "";
     history.pushState({}, '', ' ');
-
-    
     igFloat.style.display = "flex";
   }
 
